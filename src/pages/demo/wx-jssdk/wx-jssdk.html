@@ -1,0 +1,30 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>微信js sdk Demo</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <div class="warp">
+    <div class="item">
+      <div class="name" (click)="getNetworkType()">点击获取网络类型</div>
+      <div>{{networkType}}</div>
+    </div>
+    <div class="item">
+      <div class="name" (click)="scanQRCode()">点击扫一扫</div>
+      <div>{{resultStr}}</div>
+    </div>
+    <div class="item">
+      <div class="name" (click)="getUserLocation()">点击获取当前坐标</div>
+      <div>{{location|json}}</div>
+    </div>
+    <div class="item">
+      <div class="name">选择照片</div>
+      <page-select-pic [max]="6" [(fileObjList)]="picList"></page-select-pic>
+      <button ion-button (click)="upload()">上传图片</button>
+    </div>
+  </div>
+</ion-content>

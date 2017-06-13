@@ -1,0 +1,8 @@
+<div class="clear-fix">
+  <div *ngFor="let fileObj of fileObjList, let i = index" class="pictures" (press)="deletePicture(i)">
+    <img [src]="sanitizer.bypassSecurityTrustResourceUrl(fileObj.thumbPath)" (click)="viewerPicture(i)">
+  </div>
+  <div *ngIf="fileObjList.length<max&&allowAdd" (click)="addPicture()" class="pictures add">
+    <ion-icon name="md-images"></ion-icon>
+  </div>
+</div>

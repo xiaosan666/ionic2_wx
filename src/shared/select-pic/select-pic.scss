@@ -1,0 +1,18 @@
+page-select-pic {
+  .pictures{
+    float: left;
+    width: 75px;
+    height: 75px;
+    margin: 2px;
+    overflow: hidden;
+  }
+
+  .add{
+    font-size: 35px;
+    color: #8c8c8c;
+    text-align: center;
+    border: solid 1px #e0dfe4;
+    line-height: 75px;
+    vertical-align: middle;
+  }
+}

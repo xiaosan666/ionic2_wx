@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <title>ionic2-微信</title>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4e8ef7">
+  <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script type="text/javascript" src="./assets/lib/qrcode.min.js"></script>
+
+  <link href="build/main.css" rel="stylesheet">
+  <style>
+    .app-spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%); /* IE 9 */
+      -webkit-transform: translate(-50%, -50%); /* Safari */
+      transform: translate(-50%, -50%); /* Standard syntax */
+      width: 80px;
+      height: 80px;
+    }
+
+    .double-bounce1, .double-bounce2 {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-color: #488aff;
+      opacity: 0.6;
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+      animation: sk-bounce 2.0s infinite ease-in-out;
+    }
+
+    .double-bounce2 {
+      -webkit-animation-delay: -1.0s;
+      animation-delay: -1.0s;
+    }
+
+    @-webkit-keyframes sk-bounce {
+      0%, 100% {
+        -webkit-transform: scale(0.0)
+      }
+      50% {
+        -webkit-transform: scale(1.0)
+      }
+    }
+
+    @keyframes sk-bounce {
+      0%, 100% {
+        transform: scale(0.0);
+        -webkit-transform: scale(0.0);
+      }
+      50% {
+        transform: scale(1.0);
+        -webkit-transform: scale(1.0);
+      }
+    }
+
+  </style>
+</head>
+<body>
+<div class="app-spinner">
+  <div class="double-bounce1"></div>
+  <div class="double-bounce2"></div>
+</div>
+<!-- Ionic's root component and where the app will load -->
+<ion-app></ion-app>
+
+<!-- The polyfills js is generated during the build process -->
+<script src="build/polyfills.js"></script>
+
+<!-- The bundle js is generated during the build process -->
+<script src="build/main.js"></script>
+
+</body>
+</html>

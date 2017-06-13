@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      首页
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <button ion-button (click)="goPageJsSdk()">测试微信js-sdk</button>
+  <br>
+  <br>
+  <br>
+  <br>
+  <input type="text" placeholder="输入订单号" [(ngModel)]="id">
+  <button ion-button (click)="click2()" small>测试微信支付</button>
+  <br>
+  <br>
+  <br>
+  <br>
+  <input type="text" #code placeholder="输入地址" value="http://en168.net/">
+  <button ion-button (click)="makeCode(code.value)" small>生成二维码</button>
+  <div #qrcode></div>
+</ion-content>
