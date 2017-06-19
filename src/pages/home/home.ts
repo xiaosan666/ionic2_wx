@@ -1,5 +1,5 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
-import {NavController} from 'ionic-angular';
+import {NavController, App} from 'ionic-angular';
 import {HttpService} from "../../providers/HttpService";
 import {Response} from "@angular/http";
 declare var wx;
@@ -11,17 +11,24 @@ declare var QRCode;
 })
 export class HomePage {
   @ViewChild('qrcode') qrcode: ElementRef;
-  QRCode:any;
-  constructor(public navCtrl: NavController, public httpService: HttpService) {
+  QRCode: any;
+
+  constructor(private navCtrl: NavController,
+              private app: App,
+              private httpService: HttpService) {
 
   }
 
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     //http://davidshimjs.github.io/qrcodejs/
     this.QRCode = new QRCode(this.qrcode.nativeElement, {
-      width : 100,
-      height : 100
+      width: 100,
+      height: 100
     });
+  }
+
+  ionViewDidEnter() {
+    this.app.setTitle('首页');
   }
 
   goPageJsSdk() {
@@ -46,10 +53,9 @@ export class HomePage {
     });
   }
 
-  makeCode(value){
+  makeCode(value) {
     this.QRCode.makeCode(value);
   }
-
 
 
 }
