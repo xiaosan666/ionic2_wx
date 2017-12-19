@@ -3,7 +3,6 @@ import {Component} from "@angular/core";
 import {NativeService} from "../../../providers/NativeService";
 import {FileObj} from "../../../model/FileObj";
 import {Position} from "../../../../typings/index";
-declare var wx;
 import {DomSanitizer} from '@angular/platform-browser';
 import {FileService} from "../../../providers/FileService";
 

@@ -2,10 +2,10 @@ import {Component} from '@angular/core';
 import {Platform} from 'ionic-angular';
 import {Storage} from '@ionic/storage';
 import {HomePage} from '../pages/home/home';
-import {GlobalData} from "../providers/GlobalData";
 import {HttpService} from "../providers/HttpService";
 import {Utils} from "../providers/Utils";
 import {Response} from "@angular/http";
+
 declare var wx;
 
 @Component({
@@ -14,12 +14,12 @@ declare var wx;
 export class MyApp {
   rootPage: any = HomePage;
 
-  constructor(private platform: Platform,
+  constructor(platform: Platform,
               private storage: Storage,
-              private globalData: GlobalData,
               private httpService: HttpService,) {
     platform.ready().then(() => {
-      this.initWxUser();
+      Utils.sessionStorageClear();//清除数据缓存
+      // this.initWxUser();
     });
   }
 

@@ -2,8 +2,11 @@
  * Created by yanxiaojun617@163.com on 12-27.
  */
 import {Injectable} from '@angular/core';
-import {ToastController, LoadingController, Loading} from 'ionic-angular';
+import {ToastController, LoadingController, Loading, AlertController} from 'ionic-angular';
 import {Position} from "../../typings/index";
+import {REQUEST_TIMEOUT} from "./Constants";
+import {GlobalData} from "./GlobalData";
+
 declare var wx;
 
 @Injectable()
@@ -12,16 +15,10 @@ export class NativeService {
   private loadingIsOpen: boolean = false;
 
   constructor(private toastCtrl: ToastController,
+              private alertCtrl: AlertController,
+              private globalData: GlobalData,
               private loadingCtrl: LoadingController) {
   }
-
-  /**
-   * 通过浏览器打开url
-   */
-  openUrlByBrowser(url: string): void {
-    window.location.href = url;
-  }
-
   /**
    * 统一调用此方法显示提示信息
    * @param message 信息内容
@@ -37,20 +34,53 @@ export class NativeService {
   };
 
   /**
+   * 通过浏览器打开url
+   */
+  openUrlByBrowser(url: string): void {
+    window.location.href = url;
+  }
+
+  /**
+   * 一个确定按钮的alert弹出框.
+   * @type {(title: string, subTitle?: string, message?: string) => void}
+   */
+  alert = (() => {
+    let isExist = false;
+    return (title: string, subTitle: string = '', message: string = ''): void => {
+      if (!isExist) {
+        isExist = true;
+        this.alertCtrl.create({
+          title: title,
+          subTitle: subTitle,
+          message: message,
+          buttons: [{
+            text: '确定', handler: () => {
+              isExist = false;
+            }
+          }],
+          enableBackdropDismiss: false
+        }).present();
+      }
+    };
+  })();
+
+  /**
    * 统一调用此方法显示loading
    * @param content 显示的内容
    */
   showLoading(content: string = ''): void {
+    if (!this.globalData.showLoading) {
+      return;
+    }
     if (!this.loadingIsOpen) {
       this.loadingIsOpen = true;
       this.loading = this.loadingCtrl.create({
         content: content
       });
       this.loading.present();
-      setTimeout(() => {//最长显示10秒
-        this.loadingIsOpen && this.loading.dismiss();
-        this.loadingIsOpen = false;
-      }, 10000);
+      setTimeout(() => {
+        this.dismissLoading();
+      }, REQUEST_TIMEOUT);
     }
   };
 
@@ -58,9 +88,20 @@ export class NativeService {
    * 关闭loading
    */
   hideLoading(): void {
-    this.loadingIsOpen && this.loading.dismiss();
-    this.loadingIsOpen = false;
+    if (!this.globalData.showLoading) {
+      this.globalData.showLoading = true;
+    }
+    setTimeout(() => {
+      this.dismissLoading();
+    }, 200);
   };
+
+  dismissLoading() {
+    if (this.loadingIsOpen) {
+      this.loadingIsOpen = false;
+      this.loading.dismiss();
+    }
+  }
 
   /**
    * 获取网络类型

@@ -5,55 +5,48 @@ import {Injectable} from '@angular/core';
 import {
   Http, Response, Headers, RequestOptions, URLSearchParams, RequestOptionsArgs, RequestMethod
 } from '@angular/http';
-import 'rxjs/add/operator/toPromise';
-import {Observable} from "rxjs";
+import {Observable, TimeoutError} from "rxjs";
 import {Utils} from "./Utils";
 import {GlobalData} from "./GlobalData";
 import {NativeService} from "./NativeService";
-import {AlertController} from "ionic-angular";
-import {APP_SERVE_URL} from "./Constants";
+import {APP_SERVE_URL, REQUEST_TIMEOUT, IS_DEBUG} from "./Constants";
+import {Logger} from "./Logger";
 
 @Injectable()
 export class HttpService {
 
   constructor(public http: Http,
-              private globalData: GlobalData,
-              private nativeService: NativeService,
-              private alertCtrl: AlertController) {
+              public globalData: GlobalData,
+              public logger: Logger,
+              public nativeService: NativeService) {
   }
 
   public request(url: string, options: RequestOptionsArgs): Observable<Response> {
-    url = HttpService.replaceUrl(url);
-    if (options.headers) {
-      options.headers.append('Authorization', 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzNzE1OGYxYjVjYTU0MzRmYjZmMjcwNGEwMDZkOWY3OCIsImNsaWVudF9pZCI6ImFwcCIsImV4cCI6MTQ5OTQ5NzAwMywianRpIjoiZDIwNjQ4YmFhNDU2NDQzOGIyYTgzNTk2MGM1NTgyM2IiLCJtb2JpbGVOdW1iZXIiOiIxMzMzMzMzMzMzMyJ9.JBnlKhGX5pNW8Zy605kYhnfZskuucf_fDgNoK8Hxvri7RcRmAHKNnkmTXw7RPjX0alh0QuZFEHGfLXcM7Smucg');
-    } else {
-      options.headers = new Headers({
-        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzNzE1OGYxYjVjYTU0MzRmYjZmMjcwNGEwMDZkOWY3OCIsImNsaWVudF9pZCI6ImFwcCIsImV4cCI6MTQ5OTQ5NzAwMywianRpIjoiZDIwNjQ4YmFhNDU2NDQzOGIyYTgzNTk2MGM1NTgyM2IiLCJtb2JpbGVOdW1iZXIiOiIxMzMzMzMzMzMzMyJ9.JBnlKhGX5pNW8Zy605kYhnfZskuucf_fDgNoK8Hxvri7RcRmAHKNnkmTXw7RPjX0alh0QuZFEHGfLXcM7Smucg'
-      });
+    url = this.formatUrlDefaultApi(url);
+    if (url.indexOf(APP_SERVE_URL) != -1) {
+      options = this.addAuthorizationHeader(options);
     }
-    return Observable.create((observer) => {
-      this.nativeService.showLoading();
-      console.log('%c 请求前 %c', 'color:blue', '', 'url', url, 'options', options);
-      this.http.request(url, options).subscribe(res => {
-        this.nativeService.hideLoading();
-        console.log('%c 请求成功 %c', 'color:green', '', 'url', url, 'options', options, 'res', res);
-        observer.next(res);
+    IS_DEBUG && console.log('%c 请求前 %c', 'color:blue', '', 'url', url, 'options', options);
+    this.nativeService.showLoading();
+    return Observable.create(observer => {
+      this.http.request(url, options).timeout(REQUEST_TIMEOUT).subscribe(res => {
+        let result = this.requestSuccessHandle(url, options, res);
+        result.success ? observer.next(result.data) : observer.error(result.data);
       }, err => {
-        this.requestFailed(url, options, err);//处理请求失败
-        observer.error(err);
+        observer.error(this.requestFailedHandle(url, options, err));
       });
     });
   }
 
-  public get(url: string, paramMap: any = null): Observable<Response> {
+
+  public get(url: string, paramMap: any = null): Observable<any> {
     return this.request(url, new RequestOptions({
       method: RequestMethod.Get,
       search: HttpService.buildURLSearchParams(paramMap)
     }));
   }
 
-
-  public post(url: string, body: any = null): Observable<Response> {
+  public post(url: string, body: any = {}): Observable<any> {
     return this.request(url, new RequestOptions({
       method: RequestMethod.Post,
       body: body,
@@ -63,58 +56,88 @@ export class HttpService {
     }));
   }
 
-  public postFormData(url: string, paramMap: any = null): Observable<Response> {
+  public postFormData(url: string, paramMap: any = null): Observable<any> {
     return this.request(url, new RequestOptions({
       method: RequestMethod.Post,
-      search: HttpService.buildURLSearchParams(paramMap).toString(),
+      body: HttpService.buildURLSearchParams(paramMap).toString(),
       headers: new Headers({
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       })
     }));
   }
 
-  public put(url: string, body: any = null): Observable<Response> {
+  public put(url: string, body: any = {}): Observable<any> {
     return this.request(url, new RequestOptions({
       method: RequestMethod.Put,
-      body: body,
-      headers: new Headers({
-        'Content-Type': 'application/json; charset=UTF-8'
-      })
+      body: body
     }));
   }
 
-  public delete(url: string, paramMap: any = null): Observable<Response> {
+  public delete(url: string, paramMap: any = null): Observable<any> {
     return this.request(url, new RequestOptions({
       method: RequestMethod.Delete,
       search: HttpService.buildURLSearchParams(paramMap).toString()
     }));
   }
 
-  public patch(url: string, body: any = null): Observable<Response> {
+  public patch(url: string, body: any = {}): Observable<any> {
     return this.request(url, new RequestOptions({
       method: RequestMethod.Patch,
       body: body
     }));
   }
 
-  public head(url: string, paramMap: any = null): Observable<Response> {
-    return this.request(url, new RequestOptions({
-      method: RequestMethod.Head,
-      search: HttpService.buildURLSearchParams(paramMap).toString()
-    }));
+
+  /**
+   * 处理请求成功事件
+   */
+  requestSuccessHandle(url: string, options: RequestOptionsArgs, res: Response) {
+    this.nativeService.hideLoading();
+    let json = res.json();
+    if (url.indexOf(APP_SERVE_URL) != -1) {
+      if (json.code != 1) {
+        IS_DEBUG && console.log('%c 请求失败 %c', 'color:red', '', 'url', url, 'options', options, 'err', res);
+        this.nativeService.alert(json.msg || '请求失败,请稍后再试!');
+        return {success: false, data: json.data};
+      } else {
+        IS_DEBUG && console.log('%c 请求成功 %c', 'color:green', '', 'url', url, 'options', options, 'res', res);
+        return {success: true, data: json.data};
+      }
+    } else {
+      return {success: true, data: json};
+    }
   }
 
-  public options(url: string, paramMap: any = null): Observable<Response> {
-    return this.request(url, new RequestOptions({
-      method: RequestMethod.Options,
-      search: HttpService.buildURLSearchParams(paramMap).toString()
-    }));
+
+  /**
+   * 处理请求失败事件
+   */
+  private requestFailedHandle(url: string, options: RequestOptionsArgs, err: Response) {
+    IS_DEBUG && console.log('%c 请求失败 %c', 'color:red', '', 'url', url, 'options', options, 'err', err);
+    this.nativeService.hideLoading();
+    if (err instanceof TimeoutError) {
+      this.nativeService.alert('请求超时,请稍后再试!');
+    }else {
+      let status = err.status;
+      let msg = '请求发生异常';
+      if (status === 0) {
+        msg = '请求失败，请求响应出错';
+      } else if (status === 404) {
+        msg = '请求失败，未找到请求地址';
+      } else if (status === 500) {
+        msg = '请求失败，服务器出错，请稍后再试';
+      }
+      this.nativeService.alert(msg);
+      this.logger.httpLog(err, msg, {
+        url: url,
+        status: status
+      });
+    }
+    return err;
   }
 
   /**
    * 将对象转为查询参数
-   * @param paramMap
-   * @returns {URLSearchParams}
    */
   private static buildURLSearchParams(paramMap): URLSearchParams {
     let params = new URLSearchParams();
@@ -132,45 +155,25 @@ export class HttpService {
   }
 
   /**
-   * 处理请求失败事件
-   * @param url
-   * @param options
-   * @param err
+   * 格式化url使用默认API地址:APP_SERVE_URL
    */
-  private requestFailed(url: string, options: RequestOptionsArgs, err) {
-    this.nativeService.hideLoading();
-    console.log('%c 请求失败 %c', 'color:red', '', 'url', url, 'options', options, 'err', err);
-    let msg = '';
-    try {
-      let error = err.json();
-      msg = error.msg || '请求发生异常';
-    } catch (e) {
-      let status = err.status;
-      if (status === 0) {
-        msg = '请求失败，请求响应出错';
-      } else if (status === 404) {
-        msg = '请求失败，未找到请求地址';
-      } else if (status === 500) {
-        msg = '请求失败，服务器出错，请稍后再试';
-      }
-    }
-    this.alertCtrl.create({
-      title: msg,
-      subTitle: status,
-      buttons: [{text: '确定'}]
-    }).present();
+  private formatUrlDefaultApi(url: string = ''): string {
+    return Utils.formatUrl(url.startsWith('http') ? url : APP_SERVE_URL + url)
   }
 
   /**
-   * url中如果有双斜杠替换为单斜杠
-   * 如:http://88.128.18.144:8080//api//demo.替换后http://88.128.18.144:8080/api/demo
-   * @param url
-   * @returns {string}
+   * 给请求头添加权限认证token
    */
-  private static replaceUrl(url) {
-    if (url.indexOf('http://') == -1) {
-      url = APP_SERVE_URL + url;
+  private addAuthorizationHeader(options: RequestOptionsArgs): RequestOptionsArgs {
+    let token = this.globalData.token;
+    if (options.headers) {
+      options.headers.append('Authorization', 'Bearer ' + token);
+    } else {
+      options.headers = new Headers({
+        'Authorization': 'Bearer ' + token
+      });
     }
-    return 'http://' + url.substring(7).replace(/\/\//g, '/');
+    return options;
   }
+
 }
