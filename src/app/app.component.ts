@@ -1,7 +1,6 @@
-import {Component} from '@angular/core';
-import {Platform} from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import {Nav, Platform} from 'ionic-angular';
 import {Storage} from '@ionic/storage';
-import {HomePage} from '../pages/home/home';
 import {HttpService} from "../providers/HttpService";
 import {Utils} from "../providers/Utils";
 import {Response} from "@angular/http";
@@ -12,14 +11,15 @@ declare var wx;
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage: any = HomePage;
+  @ViewChild('myNav') nav: Nav;
+  rootPage: any = 'HomePage';
 
   constructor(platform: Platform,
               private storage: Storage,
               private httpService: HttpService,) {
     platform.ready().then(() => {
-      Utils.sessionStorageClear();//清除数据缓存
       // this.initWxUser();
+      Utils.sessionStorageClear();//清除数据缓存
     });
   }
 
@@ -68,5 +68,6 @@ export class MyApp {
       });
     });
   }
+
 }
 

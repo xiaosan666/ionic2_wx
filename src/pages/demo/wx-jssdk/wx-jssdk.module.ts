@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
-import { IonicPageModule } from 'ionic-angular';
-import { WxJssdk } from './wx-jssdk';
+import {NgModule} from '@angular/core';
+import {IonicPageModule} from 'ionic-angular';
+import {WxJssdk} from './wx-jssdk';
 import {SharedModule} from "../../../shared/shared.module";
 
 @NgModule({
@@ -8,10 +8,8 @@ import {SharedModule} from "../../../shared/shared.module";
     WxJssdk,
   ],
   imports: [
-    IonicPageModule.forChild(WxJssdk),SharedModule
-  ],
-  exports: [
-    WxJssdk
+    IonicPageModule.forChild(WxJssdk), SharedModule
   ]
 })
-export class WxJssdkModule {}
+export class WxJssdkModule {
+}
