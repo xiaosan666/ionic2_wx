@@ -9,7 +9,7 @@ import {Observable, TimeoutError} from "rxjs";
 import {Utils} from "./Utils";
 import {GlobalData} from "./GlobalData";
 import {NativeService} from "./NativeService";
-import {APP_SERVE_URL, REQUEST_TIMEOUT, IS_DEBUG} from "./Constants";
+import {APP_SERVE_URL, REQUEST_TIMEOUT, IS_DEBUG, WX_SERVE_URL} from "./Constants";
 import {Logger} from "./Logger";
 
 @Injectable()
@@ -94,7 +94,7 @@ export class HttpService {
   requestSuccessHandle(url: string, options: RequestOptionsArgs, res: Response) {
     this.nativeService.hideLoading();
     let json = res.json();
-    if (url.indexOf(APP_SERVE_URL) != -1) {
+    if (url.indexOf(APP_SERVE_URL) != -1 || url.indexOf(WX_SERVE_URL) != -1) {
       if (json.code != 1) {
         IS_DEBUG && console.log('%c 请求失败 %c', 'color:red', '', 'url', url, 'options', options, 'err', res);
         this.nativeService.alert(json.msg || '请求失败,请稍后再试!');
@@ -117,7 +117,7 @@ export class HttpService {
     this.nativeService.hideLoading();
     if (err instanceof TimeoutError) {
       this.nativeService.alert('请求超时,请稍后再试!');
-    }else {
+    } else {
       let status = err.status;
       let msg = '请求发生异常';
       if (status === 0) {
