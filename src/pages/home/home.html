@@ -7,15 +7,14 @@
 </ion-header>
 
 <ion-content padding>
-  <button ion-button (click)="demo()">demo</button>
-  <br>
-  <br>
-  <br>
-  <br>
-  <input type="text" placeholder="输入订单号" [(ngModel)]="id">
-  <button ion-button (click)="click2()" small>测试微信支付</button>
-  <br>
-  <br>
-  <br>
-  <br>
+  <div padding>
+    本demo只提供ionic微信公众号基础开发功能和微信JsSdk调用demo,更多demo请查看<a
+    href="https://github.com/yanxiaojun617/ionic2_tabs/" target="_blank">ionic2_tabs</a>
+  </div>
+  <div padding>
+    <button ion-button block color="dark" (click)="demo()">demo</button>
+  </div>
+  <div padding>
+    <button ion-button block color="dark" (click)="jsSdkDemo()">微信JsSdk Demo</button>
+  </div>
 </ion-content>

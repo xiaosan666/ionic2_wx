@@ -1,0 +1,14 @@
+page-normal-demo {
+  .warp > .item {
+    border-bottom: 1px solid #dfdfdf;
+    padding: 10px;
+  }
+
+  .warp > .item:first-child {
+    border-top: 1px solid #dfdfdf;
+  }
+  .warp > .item > .name {
+    color: #555;
+    padding: 8px 0;
+  }
+}

@@ -18,7 +18,7 @@ export class MyApp {
       //   console.log(wxUserInfo);
       //   this.helper.initWxJsSdk();
       // });
-      // this.helper.initWxJsSdk();
+      this.helper.initWxJsSdk();
       this.helper.alloyLeverInit();//本地"开发者工具"
       Utils.sessionStorageClear();//清除数据缓存
     });

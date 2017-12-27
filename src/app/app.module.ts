@@ -1,6 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {ErrorHandler, NgModule} from '@angular/core';
-import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
+import {IonicApp, IonicModule} from 'ionic-angular';
 
 import {MyApp} from './app.component';
 import {HttpModule} from "@angular/http";
@@ -29,9 +29,7 @@ export class FunDebugErrorHandler implements ErrorHandler {
 }
 
 @NgModule({
-  declarations: [
-    MyApp
-  ],
+  declarations: [MyApp],
   imports: [
     BrowserModule,
     HttpModule,
@@ -42,16 +40,13 @@ export class FunDebugErrorHandler implements ErrorHandler {
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp
-  ],
+  entryComponents: [MyApp],
   providers: [
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    HttpService,
-    GlobalData,
-    Helper,
+    {provide: ErrorHandler, useClass: FunDebugErrorHandler},
     NativeService,
+    HttpService,
     FileService,
+    Helper,
     Utils,
     GlobalData,
     Logger

@@ -112,11 +112,22 @@ export class NativeService {
     }, 200);
   };
 
-  dismissLoading() {
+  private dismissLoading() {
     if (this.loadingIsOpen) {
       this.loadingIsOpen = false;
       this.loading.dismiss();
     }
+  }
+
+  /**
+   * 判断是否有网络
+   */
+  getConnectionStatus(): Promise<boolean> {
+    return new Promise((resolve) => {
+      this.getNetworkType().then(res => {
+        resolve(res !== 'none');
+      })
+    })
   }
 
   /**
@@ -129,6 +140,9 @@ export class NativeService {
         success: function (res) {
           let networkType = res.networkType; // 返回网络类型2g，3g，4g，wifi
           resolve(networkType);
+        },
+        fail: function () {
+          resolve('none');
         }
       });
     });
@@ -214,6 +228,22 @@ export class NativeService {
         }
       });
     });
+  }
+
+  /**
+   * 拨打电话
+   * @param number
+   */
+  callNumber(number: string): void {
+    if (this.isIosBrowser) {
+      let a = document.createElement('a');
+      a.href = 'tel:' + number;
+      a.style.visibility = 'hidden';
+      document.body.appendChild(a);
+      a.click();
+    } else {
+      window.location.href = 'tel:' + number;
+    }
   }
 
   /**

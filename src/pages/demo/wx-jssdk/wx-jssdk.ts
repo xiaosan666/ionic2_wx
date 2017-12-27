@@ -16,23 +16,11 @@ export class WxJssdk {
               private fileService: FileService) {
   }
 
+  location: Position;
   networkType: string = '';
+  isConnecting: boolean;
   picList: FileObj[] = [];
   resultStr: string = '';
-  location: Position;
-
-
-  getNetworkType() {
-    this.nativeService.getNetworkType().then(res => {
-      this.networkType = res;
-    });
-  }
-
-  scanQRCode() {
-    this.nativeService.scanQRCode().then(res => {
-      this.resultStr = res;
-    });
-  }
 
   getUserLocation() {
     this.nativeService.getUserLocation().then(res => {
@@ -49,11 +37,33 @@ export class WxJssdk {
     this.nativeService.openLocation(options);
   }
 
+  getNetworkType() {
+    this.nativeService.getNetworkType().then(res => {
+      this.networkType = res;
+    });
+  }
+
+  getConnectionStatus() {
+    console.log('1');
+    this.nativeService.getConnectionStatus().then(res => {
+      this.isConnecting = res;
+    });
+  }
+
+  scanQRCode() {
+    this.nativeService.scanQRCode().then(res => {
+      this.resultStr = res;
+    });
+  }
 
   upload() {
     this.fileService.uploadMultiByFilePath(this.picList).subscribe(res => {
       console.log(res);
     })
+  }
+
+  callNumber() {
+    this.nativeService.callNumber('18688498342');
   }
 
 }
