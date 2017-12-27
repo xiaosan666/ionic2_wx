@@ -43,8 +43,7 @@ export class WxJssdk {
     });
   }
 
-  getConnectionStatus() {
-    console.log('1');
+  connectionStatus() {
     this.nativeService.getConnectionStatus().then(res => {
       this.isConnecting = res;
     });
