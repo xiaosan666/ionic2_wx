@@ -1,14 +1,14 @@
 import {NgModule} from '@angular/core';
 import {IonicPageModule} from 'ionic-angular';
 import {WxJssdk} from './wx-jssdk';
-import {SharedModule} from "../../../shared/shared.module";
+import {SelectPicturePageModule} from '../../../shared/select-picture/select-picture.module';
 
 @NgModule({
   declarations: [
     WxJssdk,
   ],
   imports: [
-    IonicPageModule.forChild(WxJssdk), SharedModule
+    IonicPageModule.forChild(WxJssdk), SelectPicturePageModule
   ]
 })
 export class WxJssdkModule {

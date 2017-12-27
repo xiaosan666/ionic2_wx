@@ -78,7 +78,7 @@ export class FileService {
     if (!fileObjList || fileObjList.length == 0) {
       return Observable.of([]);
     }
-    return this.httpService.post(FILE_SERVE_URL + '/appUpload?directory=ionic2_tabs', fileObjList).map(result => {
+    return this.httpService.post(FILE_SERVE_URL + '/appUpload?directory=ionic2_wx', fileObjList).map(result => {
       if (!result.success) {
         this.nativeService.alert(result.msg);
         return [];
@@ -119,19 +119,18 @@ export class FileService {
       this.nativeService.showLoading();
       let fileObjs = [];
       for (let fileObj of fileObjList) {
-        this.nativeService.convertImgToBase64(fileObj.origPath, base64 => {
+        this.nativeService.localIdToBase64(fileObj.origPath).then(data => {
           fileObjs.push({
-            'base64': base64,
-            'type': FileService.getFileType(fileObj.origPath),
+            'base64': data.base64,
             'parameter': fileObj.parameter
           });
           if (fileObjs.length === fileObjList.length) {
             this.uploadMultiByBase64(fileObjs).subscribe(res => {
-              observer.next(res);
               this.nativeService.hideLoading();
+              observer.next(res);
             })
           }
-        });
+        })
       }
     });
   }
@@ -148,11 +147,6 @@ export class FileService {
     return this.uploadMultiByFilePath([fileObj]).map(res => {
       return res[0] || {};
     })
-  }
-
-  //根据文件后缀获取文件类型
-  private static getFileType(path: string): string {
-    return path.substring(path.lastIndexOf('.') + 1);
   }
 
 }

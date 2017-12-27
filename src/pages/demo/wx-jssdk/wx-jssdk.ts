@@ -3,7 +3,6 @@ import {Component} from "@angular/core";
 import {NativeService} from "../../../providers/NativeService";
 import {FileObj} from "../../../model/FileObj";
 import {Position} from "../../../../typings/index";
-import {DomSanitizer} from '@angular/platform-browser';
 import {FileService} from "../../../providers/FileService";
 
 @IonicPage()
@@ -14,10 +13,8 @@ import {FileService} from "../../../providers/FileService";
 export class WxJssdk {
 
   constructor(private nativeService: NativeService,
-              private fileService: FileService,
-              public sanitizer: DomSanitizer) {
+              private fileService: FileService) {
   }
-
 
   networkType: string = '';
   picList: FileObj[] = [];
@@ -43,11 +40,19 @@ export class WxJssdk {
     });
   }
 
+  openLocation() {
+    let options = {
+      latitude: 23.119495, // 纬度，浮点数，范围为90 ~ -90
+      longitude: 113.350912, // 经度，浮点数，范围为180 ~ -180。
+      name: '广电科技大厦', // 位置名
+    };
+    this.nativeService.openLocation(options);
+  }
+
 
   upload() {
-    debugger;
     this.fileService.uploadMultiByFilePath(this.picList).subscribe(res => {
-      debugger;
+      console.log(res);
     })
   }
 

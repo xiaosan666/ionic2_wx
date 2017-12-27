@@ -11,7 +11,6 @@ import {HttpService} from "../providers/HttpService";
 import {GlobalData} from "../providers/GlobalData";
 import {Helper} from "../providers/Helper";
 import {Utils} from "../providers/Utils";
-import {SharedModule} from "../shared/shared.module";
 import {FUNDEBUG_API_KEY, IS_DEBUG} from "../providers/Constants";
 import {Logger} from "../providers/Logger";
 
@@ -40,8 +39,7 @@ export class FunDebugErrorHandler implements ErrorHandler {
       mode: 'ios',//android是'md'
       backButtonText: ''
     }),
-    IonicStorageModule.forRoot(),
-    SharedModule
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [

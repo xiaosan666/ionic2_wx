@@ -19,6 +19,46 @@ export class NativeService {
               private globalData: GlobalData,
               private loadingCtrl: LoadingController) {
   }
+
+
+  /**
+   * 是否ios浏览器
+   */
+  isIosBrowser = (() => {
+    let isIos = null;
+    return () => {
+      if (isIos === null) {
+        isIos = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+      }
+      return isIos;
+    };
+  })();
+
+  /**
+   * 只有一个确定按钮的弹出框.
+   * 如果已经打开则不再打开
+   */
+  alert = (() => {
+    let isExist = false;
+    return (title: string, subTitle: string = '', message: string = '', callBackFun = null): void => {
+      if (!isExist) {
+        isExist = true;
+        this.alertCtrl.create({
+          title: title,
+          subTitle: subTitle,
+          message: message,
+          buttons: [{
+            text: '确定', handler: () => {
+              isExist = false;
+              callBackFun && callBackFun();
+            }
+          }],
+          enableBackdropDismiss: false
+        }).present();
+      }
+    };
+  })();
+
   /**
    * 统一调用此方法显示提示信息
    * @param message 信息内容
@@ -39,30 +79,6 @@ export class NativeService {
   openUrlByBrowser(url: string): void {
     window.location.href = url;
   }
-
-  /**
-   * 一个确定按钮的alert弹出框.
-   * @type {(title: string, subTitle?: string, message?: string) => void}
-   */
-  alert = (() => {
-    let isExist = false;
-    return (title: string, subTitle: string = '', message: string = ''): void => {
-      if (!isExist) {
-        isExist = true;
-        this.alertCtrl.create({
-          title: title,
-          subTitle: subTitle,
-          message: message,
-          buttons: [{
-            text: '确定', handler: () => {
-              isExist = false;
-            }
-          }],
-          enableBackdropDismiss: false
-        }).present();
-      }
-    };
-  })();
 
   /**
    * 统一调用此方法显示loading
@@ -119,9 +135,7 @@ export class NativeService {
   }
 
   /**
-   * 选择照片
-   * @param options
-   * @returns {Promise<string[]>}
+   * 选择照片或拍照
    */
   chooseImage(options = {}): Promise<string[]> {
     let ops = Object.assign({
@@ -132,7 +146,6 @@ export class NativeService {
     return new Promise((resolve) => {
       wx.chooseImage(Object.assign({
         success: function (res) {
-          console.log('chooseImage:' + res);
           let localIds = res.localIds; //返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
           resolve(localIds);
         }
@@ -142,15 +155,35 @@ export class NativeService {
 
 
   /**
-   * 根据图片绝对路径转化为base64字符串
-   * @param url 绝对路径
-   * @param callback 回调函数
+   * 根据图片路径把图片转化为base64字符串
    */
-  convertImgToBase64(url: string, callback) {
-    wx.getLocalImgData({
-      localId: url, // 图片的localID
-      success: function (res) {
-        callback.call(this, res.localData);
+  localIdToBase64(localId: string): Promise<any> {
+    let that = this;
+    return new Promise((resolve) => {
+      wx.getLocalImgData({
+        localId: localId,
+        success: function (res) {
+          let localData = res.localData;
+          let base64 = that.isIosBrowser() ? localData : 'data:image/jpg;base64,' + localData;
+          resolve({'localId': localId, 'base64': base64});
+        }
+      });
+    });
+  }
+
+  /**
+   * 根据图片路径数组把图片转化为base64字符串
+   */
+  localIdsToBase64(localIds: Array<string>): Promise<Array<any>> {
+    let result = [];
+    return new Promise((resolve) => {
+      for (let localId of localIds) {
+        this.localIdToBase64(localId).then(data => {
+          result.push(data);
+          if (result.length === localIds.length) {
+            resolve(result);
+          }
+        })
       }
     });
   }
@@ -185,17 +218,32 @@ export class NativeService {
 
   /**
    * 获得用户当前坐标
-   * @return {Promise<Position>}
    */
   getUserLocation(type = 'gcj02'): Promise<Position> {
     return new Promise((resolve) => {
       wx.getLocation({
-        type: type, // 坐标系,wgs84或gcj02'
+        type: type, //关于坐标系https://www.jianshu.com/p/d3dd4149bb0b
         success: function (res) {
-          resolve({'lng': res.longitude, 'lat': res.latitude});
+          resolve({'longitude': res.longitude, 'latitude': res.latitude});
         }
       });
     });
+  }
+
+  /**
+   * 在腾讯地图上显示坐标详细
+   * 可以查看位置,导航
+   */
+  openLocation(options) {
+    let ops = Object.assign({
+      latitude: 0, // 纬度，浮点数，范围为90 ~ -90
+      longitude: 0, // 经度，浮点数，范围为180 ~ -180。
+      name: '', // 位置名
+      address: '', // 地址详情说明
+      scale: this.isIosBrowser() ? 15 : 18, // 地图缩放级别,整形值,范围从1~28。默认为最大
+      infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
+    }, options);
+    wx.openLocation(ops);
   }
 
 }

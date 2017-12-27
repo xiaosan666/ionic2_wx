@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>微信js-sdk demo</ion-title>
+    <ion-title id="entry">微信js-sdk demo</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -9,6 +9,13 @@
 <ion-content>
 
   <div class="warp">
+    <div class="item">
+      <div class="name" (click)="getUserLocation()">点击获取当前坐标</div>
+      <div>{{location|json}}</div>
+    </div>
+    <div class="item">
+      <div class="name" (click)="openLocation()">在腾讯地图查看位置</div>
+    </div>
     <div class="item">
       <div class="name" (click)="getNetworkType()">点击获取网络类型</div>
       <div>{{networkType}}</div>
@@ -18,12 +25,8 @@
       <div>{{resultStr}}</div>
     </div>
     <div class="item">
-      <div class="name" (click)="getUserLocation()">点击获取当前坐标</div>
-      <div>{{location|json}}</div>
-    </div>
-    <div class="item">
       <div class="name">选择照片</div>
-      <page-select-pic [max]="6" [(fileObjList)]="picList"></page-select-pic>
+      <page-select-picture [(fileObjList)]="picList"></page-select-picture>
       <button ion-button (click)="upload()">上传图片</button>
     </div>
   </div>
