@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>demo</ion-title>
+    <ion-title id="entry2">请点击6次</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -15,8 +15,8 @@
 
 <ion-content padding>
   <div class="warp">
-    <div class="item">
-      <div class="name" (click)="updateTitle()">点击修改页面title</div>
+    <div class="item" (click)="updateTitle()">
+      <div class="name">点击修改页面title</div>
       <div>{{title}}</div>
     </div>
   </div>

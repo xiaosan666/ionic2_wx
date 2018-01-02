@@ -14,7 +14,7 @@ export class MyApp {
               private helper: Helper) {
     this.platform.ready().then(() => {
       //如果不需要微信用户信息,则直接调用this.initWxJsSdk();
-      // this.initWxUser((wxUserInfo: WxUserInfo) => {
+      // this.helper.initWxUser((wxUserInfo) => {
       //   console.log(wxUserInfo);
       //   this.helper.initWxJsSdk();
       // });

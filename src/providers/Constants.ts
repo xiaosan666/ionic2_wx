@@ -9,8 +9,8 @@ export const FILE_SERVE_URL = 'http://88.128.18.144:3333';
 // export const FILE_SERVE_URL = 'http://172.16.19.86/kit_file_server';
 
 /*----------------------------------------微信认证服务api----------------------------------------*/
-export const  WX_SERVE_URL = 'http://88.128.18.144:8102/api/ak/yanxiaojun';//js安全域名: http://88.128.18.144:8100/?vconsole=show
-// export const  WX_SERVE_URL = 'http://88.128.18.144:8102/api/ak/xiaojingling';//js安全域名: http://8xz2g7.natappfree.cc/?vconsole=show
+export const  WX_SERVE_URL = 'http://88.128.25.93:8102/api/ak/yanxiaojun';//js安全域名: http://88.128.18.144:8100/?vconsole=show
+// export const  WX_SERVE_URL = 'http://88.128.25.93:8102/api/ak/xiaojingling';//js安全域名: http://8xz2g7.natappfree.cc/?vconsole=show
 
 export const IS_DEBUG = false;//是否开发(调试)模式
 export const REQUEST_TIMEOUT = 20000;//请求超时时间,单位为毫秒

@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {App, IonicPage} from 'ionic-angular';
-import {NativeService} from '../../../providers/NativeService';
-
+declare var AlloyLever;
 
 @IonicPage()
 @Component({
@@ -12,11 +11,13 @@ export class NormalDemoPage {
 
   title = '页面title';
 
-  constructor(public app: App, private nativeService: NativeService) {
+  constructor(public app: App) {
   }
 
   ionViewDidEnter() {
     this.app.setTitle(this.title);
+    AlloyLever.entry('#entry2')
+
   }
 
   updateTitle() {
