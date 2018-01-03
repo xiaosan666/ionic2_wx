@@ -3,10 +3,10 @@ import {IonicPage, NavController} from 'ionic-angular';
 
 @IonicPage()
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html'
+  selector: 'page-index',
+  templateUrl: 'index.html',
 })
-export class HomePage {
+export class IndexPage {
 
   constructor(private navCtrl: NavController) {
   }

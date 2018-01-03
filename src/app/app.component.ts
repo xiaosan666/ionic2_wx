@@ -8,7 +8,7 @@ import {Helper} from '../providers/Helper';
 })
 export class MyApp {
   @ViewChild('myNav') nav: Nav;
-  rootPage: any = 'HomePage';
+  rootPage: any = 'IndexPage';
 
   constructor(private platform: Platform,
               private helper: Helper) {
