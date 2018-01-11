@@ -25,15 +25,17 @@ page-select-picture {
   }
 
   .remove {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     position: absolute;
     right: -5px;
     top: -5px;
-    display: block;
     width: 18px;
     height: 18px;
     border-radius: 18px;
     font-size: 16px;
-    text-align: center;
     color: #fff;
     background-color: red;
   }

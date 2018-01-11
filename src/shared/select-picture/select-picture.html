@@ -1,6 +1,6 @@
 <div class="clear-fix" style="padding-top: 2px;" *ngIf="fileObjList">
   <div *ngFor="let fileObj of fileObjList, let i = index" class="pictures">
-    <span *ngIf="allowDelete" class="remove" tappable (click)="deletePicture(i)">×</span>
+    <span *ngIf="allowDelete" class="remove"  [style.padding-bottom] = "nativeService.isIosBrowser() ? '3px': ''" tappable (click)="deletePicture(i)">×</span>
     <img [src]="sanitizer.bypassSecurityTrustResourceUrl(fileObj.thumbPath)" tappable (click)="viewerPicture(i)">
   </div>
   <div *ngIf="fileObjList.length<max&&allowAdd" tappable (click)="addPicture()" class="pictures add">
