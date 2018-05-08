@@ -1,6 +1,6 @@
-import {NgModule} from '@angular/core';
-import {IonicPageModule} from 'ionic-angular';
-import {SelectPicturePage} from './select-picture';
+import { NgModule } from '@angular/core';
+import { IonicPageModule } from 'ionic-angular';
+import { SelectPicturePage } from './select-picture';
 
 @NgModule({
   declarations: [

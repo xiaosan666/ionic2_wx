@@ -1,11 +1,11 @@
 /**
  * Created by yanxiaojun617@163.com on 12-27.
  */
-import {Injectable} from '@angular/core';
-import {ToastController, LoadingController, Loading, AlertController} from 'ionic-angular';
-import {Position} from "../../typings/index";
-import {REQUEST_TIMEOUT} from "./Constants";
-import {GlobalData} from "./GlobalData";
+import { Injectable } from '@angular/core';
+import { ToastController, LoadingController, Loading, AlertController } from 'ionic-angular';
+import { Position } from '../../typings/index';
+import { REQUEST_TIMEOUT } from './Constants';
+import { GlobalData } from './GlobalData';
 
 declare var wx;
 
@@ -20,6 +20,19 @@ export class NativeService {
               private loadingCtrl: LoadingController) {
   }
 
+
+  /**
+   * 是否微信浏览器
+   */
+  isWXBrowser = (() => {
+    let isWx = null;
+    return () => {
+      if (isWx === null) {
+        isWx = navigator.userAgent.toLowerCase().indexOf('micromessenger') !== -1;
+      }
+      return isWx;
+    };
+  })();
 
   /**
    * 是否ios浏览器
@@ -44,9 +57,9 @@ export class NativeService {
       if (!isExist) {
         isExist = true;
         this.alertCtrl.create({
-          title: title,
-          subTitle: subTitle,
-          message: message,
+          title,
+          subTitle,
+          message,
           buttons: [{
             text: '确定', handler: () => {
               isExist = false;
@@ -66,12 +79,12 @@ export class NativeService {
    */
   showToast(message: string = '操作完成', duration: number = 2000): void {
     this.toastCtrl.create({
-      message: message,
-      duration: duration,
+      message,
+      duration,
       position: 'middle',
       showCloseButton: false
     }).present();
-  };
+  }
 
   /**
    * 通过浏览器打开url
@@ -91,14 +104,14 @@ export class NativeService {
     if (!this.loadingIsOpen) {
       this.loadingIsOpen = true;
       this.loading = this.loadingCtrl.create({
-        content: content
+        content
       });
       this.loading.present();
       setTimeout(() => {
         this.dismissLoading();
       }, REQUEST_TIMEOUT);
     }
-  };
+  }
 
   /**
    * 关闭loading
@@ -110,7 +123,7 @@ export class NativeService {
     setTimeout(() => {
       this.dismissLoading();
     }, 200);
-  };
+  }
 
   private dismissLoading() {
     if (this.loadingIsOpen) {
@@ -126,8 +139,8 @@ export class NativeService {
     return new Promise((resolve) => {
       this.getNetworkType().then(res => {
         resolve(res !== 'none');
-      })
-    })
+      });
+    });
   }
 
   /**
@@ -137,11 +150,11 @@ export class NativeService {
   getNetworkType(): Promise<string> {
     return new Promise((resolve) => {
       wx.getNetworkType({
-        success: function (res) {
+        success (res) {
           let networkType = res.networkType; // 返回网络类型2g，3g，4g，wifi
           resolve(networkType);
         },
-        fail: function () {
+        fail () {
           resolve('none');
         }
       });
@@ -152,18 +165,16 @@ export class NativeService {
    * 选择照片或拍照
    */
   chooseImage(options = {}): Promise<string[]> {
-    let ops = Object.assign({
-      count: 9,//图片数量
+    let ops = {
+      count: 9, //图片数量
       sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-      sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-    }, options);
+      sourceType: ['album', 'camera'], ...options};
     return new Promise((resolve) => {
-      wx.chooseImage(Object.assign({
-        success: function (res) {
+      wx.chooseImage({
+        success (res) {
           let localIds = res.localIds; //返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
           resolve(localIds);
-        }
-      }, ops));
+        }, ...ops});
     });
   }
 
@@ -175,8 +186,8 @@ export class NativeService {
     let that = this;
     return new Promise((resolve) => {
       wx.getLocalImgData({
-        localId: localId,
-        success: function (res) {
+        localId,
+        success (res) {
           let localData = res.localData;
           let base64 = that.isIosBrowser() ? localData : 'data:image/jpg;base64,' + localData;
           resolve({'localId': localId, 'base64': base64});
@@ -197,7 +208,7 @@ export class NativeService {
           if (result.length === localIds.length) {
             resolve(result);
           }
-        })
+        });
       }
     });
   }
@@ -209,8 +220,8 @@ export class NativeService {
    */
   previewImage(current = '', urls = []) {
     wx.previewImage({
-      current: current, // 当前显示图片的http链接
-      urls: urls // 需要预览的图片http链接列表
+      current, // 当前显示图片的http链接
+      urls // 需要预览的图片http链接列表
     });
   }
 
@@ -221,9 +232,9 @@ export class NativeService {
   scanQRCode(needResult = '1'): Promise<string> {
     return new Promise((resolve) => {
       wx.scanQRCode({
-        needResult: needResult, // 0扫描结果由微信处理，1则直接返回扫描结果，
-        scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
-        success: function (res) {
+        needResult, // 0扫描结果由微信处理，1则直接返回扫描结果，
+        scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
+        success (res) {
           resolve(res.resultStr);
         }
       });
@@ -252,8 +263,8 @@ export class NativeService {
   getUserLocation(type = 'gcj02'): Promise<Position> {
     return new Promise((resolve) => {
       wx.getLocation({
-        type: type, //关于坐标系https://www.jianshu.com/p/d3dd4149bb0b
-        success: function (res) {
+        type, //关于坐标系https://www.jianshu.com/p/d3dd4149bb0b
+        success (res) {
           resolve({'longitude': res.longitude, 'latitude': res.latitude});
         }
       });
@@ -265,14 +276,13 @@ export class NativeService {
    * 可以查看位置,导航
    */
   openLocation(options) {
-    let ops = Object.assign({
+    let ops = {
       latitude: 0, // 纬度，浮点数，范围为90 ~ -90
       longitude: 0, // 经度，浮点数，范围为180 ~ -180。
       name: '', // 位置名
       address: '', // 地址详情说明
       scale: this.isIosBrowser() ? 15 : 18, // 地图缩放级别,整形值,范围从1~28。默认为最大
-      infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
-    }, options);
+      infoUrl: '', ...options};
     wx.openLocation(ops);
   }
 

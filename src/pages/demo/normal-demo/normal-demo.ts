@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {App, IonicPage} from 'ionic-angular';
+import { Component } from '@angular/core';
+import { App, IonicPage } from 'ionic-angular';
 declare var AlloyLever;
 
 @IonicPage()
@@ -16,7 +16,7 @@ export class NormalDemoPage {
 
   ionViewDidEnter() {
     this.app.setTitle(this.title);
-    AlloyLever.entry('#entry2')
+    AlloyLever.entry('#entry2');
 
   }
 

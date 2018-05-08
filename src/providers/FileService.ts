@@ -1,12 +1,12 @@
 /**
  * Created by yanxiaojun617@163.com on 12-23.
  */
-import {Injectable} from "@angular/core";
-import {HttpService} from "./HttpService";
-import {FILE_SERVE_URL} from "./Constants";
-import {FileObj} from "../model/FileObj";
-import {Observable} from "rxjs";
-import {NativeService} from "./NativeService";
+import { Injectable } from '@angular/core';
+import { HttpService } from './HttpService';
+import { FILE_SERVE_URL } from './Constants';
+import { FileObj } from '../model/FileObj';
+import { Observable } from 'rxjs';
+import { NativeService } from './NativeService';
 
 /**
  * 上传图片到文件服务器
@@ -27,7 +27,7 @@ export class FileService {
     if (!id) {
       return Observable.of({});
     }
-    return this.httpService.get(FILE_SERVE_URL + '/deleteById', {id: id});
+    return this.httpService.get(FILE_SERVE_URL + '/deleteById', {id});
   }
 
   /**
@@ -40,7 +40,7 @@ export class FileService {
     if (!ids || ids.length == 0) {
       return Observable.of([]);
     }
-    return this.httpService.get(FILE_SERVE_URL + '/getByIds', {ids: ids}).map(result => {
+    return this.httpService.get(FILE_SERVE_URL + '/getByIds', {ids}).map(result => {
       if (!result.success) {
         this.nativeService.alert(result.msg);
         return [];
@@ -66,7 +66,7 @@ export class FileService {
     }
     return this.getFileInfoByIds([id]).map(res => {
       return res[0] || {};
-    })
+    });
   }
 
   /**
@@ -103,7 +103,7 @@ export class FileService {
     }
     return this.uploadMultiByBase64([fileObj]).map(res => {
       return res[0] || {};
-    })
+    });
   }
 
   /**
@@ -128,9 +128,9 @@ export class FileService {
             this.uploadMultiByBase64(fileObjs).subscribe(res => {
               this.nativeService.hideLoading();
               observer.next(res);
-            })
+            });
           }
-        })
+        });
       }
     });
   }
@@ -146,7 +146,7 @@ export class FileService {
     }
     return this.uploadMultiByFilePath([fileObj]).map(res => {
       return res[0] || {};
-    })
+    });
   }
 
 }

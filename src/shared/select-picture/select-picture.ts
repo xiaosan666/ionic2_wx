@@ -1,10 +1,10 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {IonicPage, AlertController} from 'ionic-angular';
-import {FileObj} from "../../model/FileObj";
-import {NativeService} from "../../providers/NativeService";
-import {FileService} from "../../providers/FileService";
-import {GlobalData} from "../../providers/GlobalData";
-import {DomSanitizer} from "@angular/platform-browser";
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { IonicPage, AlertController } from 'ionic-angular';
+import { FileObj } from '../../model/FileObj';
+import { NativeService } from '../../providers/NativeService';
+import { FileService } from '../../providers/FileService';
+import { GlobalData } from '../../providers/GlobalData';
+import { DomSanitizer } from '@angular/platform-browser';
 
 /**
  * 自定义添加/预览图片组件
@@ -39,17 +39,17 @@ export class SelectPicturePage {
       count: (this.max - this.fileObjList.length)
     }).then(localIds => {
       //由于ios显示直接图片路径有bug,所以缩略图使用base64字符串用于显示
-      if(this.nativeService.isIosBrowser()){
+      if (this.nativeService.isIosBrowser()) {
         this.nativeService.localIdsToBase64(localIds).then(res => {
           for (let data of res) {
-            let fileObj = <FileObj>{'origPath': data.localId, 'thumbPath': data.base64};
+            let fileObj = {'origPath': data.localId, 'thumbPath': data.base64};
             this.fileObjList.push(fileObj);
           }
           this.fileObjListChange.emit(this.fileObjList);
-        })
-      }else{
+        });
+      } else {
         for (let localId of localIds) {
-          let fileObj = <FileObj>{'origPath': localId, 'thumbPath': localId};
+          let fileObj = {'origPath': localId, 'thumbPath': localId};
           this.fileObjList.push(fileObj);
         }
         this.fileObjListChange.emit(this.fileObjList);
@@ -81,7 +81,8 @@ export class SelectPicturePage {
   }
 
   viewerPicture(index) {//照片预览
-    let urls = [], current = '';
+    let urls = [];
+    let current = '';
     for (let i = 0, len = this.fileObjList.length; i < len; i++) {
       let origPath = this.fileObjList[i].origPath;
       if (i == index) {

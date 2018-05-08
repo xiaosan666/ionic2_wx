@@ -1,9 +1,9 @@
-import {IonicPage} from 'ionic-angular';
-import {Component} from "@angular/core";
-import {NativeService} from "../../../providers/NativeService";
-import {FileObj} from "../../../model/FileObj";
-import {Position} from "../../../../typings/index";
-import {FileService} from "../../../providers/FileService";
+import { IonicPage } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { NativeService } from '../../../providers/NativeService';
+import { FileObj } from '../../../model/FileObj';
+import { Position } from '../../../../typings/index';
+import { FileService } from '../../../providers/FileService';
 
 @IonicPage()
 @Component({
@@ -58,7 +58,7 @@ export class WxJssdk {
   upload() {
     this.fileService.uploadMultiByFilePath(this.picList).subscribe(res => {
       console.log(res);
-    })
+    });
   }
 
   callNumber() {

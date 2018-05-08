@@ -1,7 +1,7 @@
 /**
  * Created by yanxiaojun617@163.com on 12-27.
  */
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
 declare let hex_md5;
 
@@ -11,9 +11,6 @@ declare let hex_md5;
  */
 @Injectable()
 export class Utils {
-
-  constructor() {
-  }
 
   static isEmpty(value): boolean {
     return value == null || typeof value === 'string' && value.length === 0;
@@ -47,7 +44,7 @@ export class Utils {
    * @returns {string}
    */
   static dateFormat(date: Date, sFormat: String = 'yyyy-MM-dd'): string {
-    let time = {
+    const time = {
       Year: 0,
       TYear: '0',
       Month: 0,
@@ -67,17 +64,17 @@ export class Utils {
     time.Year = date.getFullYear();
     time.TYear = String(time.Year).substr(2);
     time.Month = date.getMonth() + 1;
-    time.TMonth = time.Month < 10 ? "0" + time.Month : String(time.Month);
+    time.TMonth = time.Month < 10 ? '0' + time.Month : String(time.Month);
     time.Day = date.getDate();
-    time.TDay = time.Day < 10 ? "0" + time.Day : String(time.Day);
+    time.TDay = time.Day < 10 ? '0' + time.Day : String(time.Day);
     time.Hour = date.getHours();
-    time.THour = time.Hour < 10 ? "0" + time.Hour : String(time.Hour);
+    time.THour = time.Hour < 10 ? '0' + time.Hour : String(time.Hour);
     time.hour = time.Hour < 13 ? time.Hour : time.Hour - 12;
-    time.Thour = time.hour < 10 ? "0" + time.hour : String(time.hour);
+    time.Thour = time.hour < 10 ? '0' + time.hour : String(time.hour);
     time.Minute = date.getMinutes();
-    time.TMinute = time.Minute < 10 ? "0" + time.Minute : String(time.Minute);
+    time.TMinute = time.Minute < 10 ? '0' + time.Minute : String(time.Minute);
     time.Second = date.getSeconds();
-    time.TSecond = time.Second < 10 ? "0" + time.Second : String(time.Second);
+    time.TSecond = time.Second < 10 ? '0' + time.Second : String(time.Second);
     time.Millisecond = date.getMilliseconds();
 
     return sFormat.replace(/yyyy/ig, String(time.Year))
@@ -96,16 +93,16 @@ export class Utils {
       .replace(/m/g, String(time.Minute))
       .replace(/ss/ig, time.TSecond)
       .replace(/s/ig, String(time.Second))
-      .replace(/fff/ig, String(time.Millisecond))
+      .replace(/fff/ig, String(time.Millisecond));
   }
 
   /**
    * 每次调用sequence加1
    * @type {()=>number}
    */
-  static getSequence = (function () {
+  static getSequence = (() => {
     let sequence = 1;
-    return function () {
+    return () => {
       return ++sequence;
     };
   })();
@@ -129,17 +126,17 @@ export class Utils {
    * @param url
    * @returns {string}
    */
-  static formatUrl(url: string = ''): string {
+  static formatUrl(url = ''): string {
     let index = 0;
     if (url.startsWith('http')) {
-      index = 7
+      index = 7;
     }
     return url.substring(0, index) + url.substring(index).replace(/\/\/*/g, '/');
   }
 
 
   static sessionStorageGetItem(key: string) {
-    let jsonString = sessionStorage.getItem(key);
+    const jsonString = sessionStorage.getItem(key);
     if (jsonString) {
       return JSON.parse(jsonString);
     }
@@ -169,8 +166,8 @@ export class Utils {
 
   /** 产生一个随机的32位长度字符串 */
   static uuid() {
-    let text = "";
-    let possible = "abcdef0123456789";
+    let text = '';
+    const possible = 'abcdef0123456789';
     for (let i = 0; i < 19; i++) {
       text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
@@ -183,7 +180,7 @@ export class Utils {
    * @returns {any}
    */
   static getQueryString(name): string {
-    let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    let reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
     let r = window.location.search.substr(1).match(reg);
     if (r != null) {
       return r[2];

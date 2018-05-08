@@ -1,11 +1,23 @@
 {
+  "extends": "tslint-config-alloy",
   "rules": {
-    "no-duplicate-variable": true,
-    "no-unused-variable": [
-      true
-    ]
+    "no-parameter-properties":false,
+    "no-redundant-jsdoc":false,
+    "triple-equals":false,
+    "no-debugger": false,
+    "member-ordering":false,
+    "no-this-assignment": [true, {"allowed-names": ["^self$","^that$"], "allow-destructuring": true}],
+    "no-unused-expression": [true, "allow-fast-null-checks", "allow-new"]
   },
   "rulesDirectory": [
     "node_modules/tslint-eslint-rules/dist/rules"
   ]
 }
+
+
+// https://github.com/palantir/tslint
+// https://github.com/buzinas/tslint-eslint-rules
+// https://github.com/AlloyTeam/tslint-config-alloy
+
+// 自动修复命令
+// tslint --fix -c ./tslint.json 'src/**/*.ts'
