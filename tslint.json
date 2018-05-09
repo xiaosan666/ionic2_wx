@@ -7,10 +7,12 @@
     "no-debugger": false,
     "member-ordering":false,
     "no-this-assignment": [true, {"allowed-names": ["^self$","^that$"], "allow-destructuring": true}],
-    "no-unused-expression": [true, "allow-fast-null-checks", "allow-new"]
+    "no-unused-expression": [true, "allow-fast-null-checks", "allow-new"],
+    "comment-space": true // 自定义的rule，单行注释必须以空格开头,可以自动修复
   },
   "rulesDirectory": [
-    "node_modules/tslint-eslint-rules/dist/rules"
+    "node_modules/tslint-eslint-rules/dist/rules",
+    "custom-tslint-rules/dist"
   ]
 }
 
@@ -20,4 +22,5 @@
 // https://github.com/AlloyTeam/tslint-config-alloy
 
 // 自动修复命令
-// tslint --fix -c ./tslint.json 'src/**/*.ts'
+// tslint --fix 'src/**/*.ts'
+

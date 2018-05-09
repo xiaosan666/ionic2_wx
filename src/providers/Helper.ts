@@ -27,14 +27,14 @@ export class Helper {
    */
   alloyLeverInit() {
     AlloyLever.config({
-      cdn: 'http://s.url.cn/qqun/qun/qqweb/m/qun/confession/js/vconsole.min.js',  //vconsole的CDN地址
+      cdn: 'http://s.url.cn/qqun/qun/qqweb/m/qun/confession/js/vconsole.min.js',  // vconsole的CDN地址
       /*reportUrl: "//a.qq.com",  //错误上报地址
       reportPrefix: 'qun',    //错误上报msg前缀，一般用于标识业务类型
       reportKey: 'msg',        //错误上报msg前缀的key，用户上报系统接收存储msg
       otherReport: {              //需要上报的其他信息
         uin: 491862102
       },
-      entry:"#entry"*/        //请点击这个DOM元素6次召唤vConsole。//你可以通过AlloyLever.entry('#entry2')设置多个机关入口召唤神龙
+      entry:"#entry"*/        // 请点击这个DOM元素6次召唤vConsole。//你可以通过AlloyLever.entry('#entry2')设置多个机关入口召唤神龙
     });
   }
 
@@ -43,25 +43,25 @@ export class Helper {
    * 生成微信认证url并在微信客户端跳转到该url > 微信服务器认证完成并返回一个code > 根据code获取微信用户信息（openId或用户信息）
    */
   initWxUser(callBackFun) {
-    //从缓存中获取微信用户信息
+    // 从缓存中获取微信用户信息
     this.storage.get('wxUserInfo').then((wxUserInfo: WxUserInfo) => {
       if (wxUserInfo) {
         callBackFun();
       } else {
-        //获取地址栏code参数值,如果没有code则请求code
+        // 获取地址栏code参数值,如果没有code则请求code
         let code = Utils.getQueryString('code');
         if (code) {
-          //通过code获取用户信息
+          // 通过code获取用户信息
           this.httpService.get(WX_SERVE_URL + '/v1/info/' + code).subscribe((wxUserInfo: WxUserInfo) => {
             this.storage.set('wxUserInfo', wxUserInfo);
             callBackFun();
           });
         } else {
-          //请求授权地址,跳转该地址浏览器地址栏会生成一个code参数,根据code参数值获取用户信息
+          // 请求授权地址,跳转该地址浏览器地址栏会生成一个code参数,根据code参数值获取用户信息
           //   code有两种类型 snsapi_base 和 snsapi_userinfo  默认为snsapi_base,通过该code可以得到用户的openId和unionId
           //   当设置scope=snsapi_userinfo 会返回更详细的用户信息,如用户头像,昵称等;注意,设置该类型需要用户同意,会先跳转到一个让用户确认授权的界面
           this.httpService.post(WX_SERVE_URL + '/v1/auth?scope=snsapi_base', window.location.href).subscribe(url => {
-            window.location.href = url; //跳转到微信授权地址,会返回一个授权code
+            window.location.href = url; // 跳转到微信授权地址,会返回一个授权code
           });
         }
       }

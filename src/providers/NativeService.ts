@@ -166,13 +166,13 @@ export class NativeService {
    */
   chooseImage(options = {}): Promise<string[]> {
     let ops = {
-      count: 9, //图片数量
+      count: 9, // 图片数量
       sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
       sourceType: ['album', 'camera'], ...options};
     return new Promise((resolve) => {
       wx.chooseImage({
         success (res) {
-          let localIds = res.localIds; //返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+          let localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
           resolve(localIds);
         }, ...ops});
     });
@@ -263,7 +263,7 @@ export class NativeService {
   getUserLocation(type = 'gcj02'): Promise<Position> {
     return new Promise((resolve) => {
       wx.getLocation({
-        type, //关于坐标系https://www.jianshu.com/p/d3dd4149bb0b
+        type, // 关于坐标系https://www.jianshu.com/p/d3dd4149bb0b
         success (res) {
           resolve({'longitude': res.longitude, 'latitude': res.latitude});
         }

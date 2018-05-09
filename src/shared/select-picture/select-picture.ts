@@ -18,13 +18,13 @@ import { DomSanitizer } from '@angular/platform-browser';
   templateUrl: 'select-picture.html',
 })
 export class SelectPicturePage {
-  @Input() max: number = 4;  //最多可选择多少张图片，默认为4张
+  @Input() max: number = 4;  // 最多可选择多少张图片，默认为4张
 
-  @Input() allowAdd: boolean = true;  //是否允许新增
+  @Input() allowAdd: boolean = true;  // 是否允许新增
 
-  @Input() allowDelete: boolean = true;  //是否允许删除
+  @Input() allowDelete: boolean = true;  // 是否允许删除
 
-  @Input() fileObjList: FileObj[] = [];   //图片列表,与fileObjListChange形成双向数据绑定
+  @Input() fileObjList: FileObj[] = [];   // 图片列表,与fileObjListChange形成双向数据绑定
   @Output() fileObjListChange = new EventEmitter<any>();
 
   constructor(private alertCtrl: AlertController,
@@ -34,11 +34,11 @@ export class SelectPicturePage {
               public sanitizer: DomSanitizer) {
   }
 
-  addPicture() {//新增照片
+  addPicture() {// 新增照片
     this.nativeService.chooseImage({
       count: (this.max - this.fileObjList.length)
     }).then(localIds => {
-      //由于ios显示直接图片路径有bug,所以缩略图使用base64字符串用于显示
+      // 由于ios显示直接图片路径有bug,所以缩略图使用base64字符串用于显示
       if (this.nativeService.isIosBrowser()) {
         this.nativeService.localIdsToBase64(localIds).then(res => {
           for (let data of res) {
@@ -57,7 +57,7 @@ export class SelectPicturePage {
     });
   }
 
-  deletePicture(i) {//删除照片
+  deletePicture(i) {// 删除照片
     if (!this.allowDelete) {
       return;
     }
@@ -80,7 +80,7 @@ export class SelectPicturePage {
     }).present();
   }
 
-  viewerPicture(index) {//照片预览
+  viewerPicture(index) {// 照片预览
     let urls = [];
     let current = '';
     for (let i = 0, len = this.fileObjList.length; i < len; i++) {
