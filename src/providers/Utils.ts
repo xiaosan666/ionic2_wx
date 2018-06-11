@@ -182,9 +182,6 @@ export class Utils {
   static getQueryString(name): string {
     let reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
     let r = window.location.search.substr(1).match(reg);
-    if (r != null) {
-      return r[2];
-    }
-    return '';
+    return r != null ? r[2] : '';
   }
 }
