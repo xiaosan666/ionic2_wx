@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>ionic微信</title>
-  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport"
+        content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="format-detection" content="telephone=no">
   <meta name="msapplication-tap-highlight" content="no">
 
@@ -69,7 +70,30 @@
 
   <!--AlloyLever https://github.com/AlloyTeam/AlloyLever -->
   <script src="./assets/lib/alloy-lever.js"></script>
+  <script>
+    /**
+     * 在Safari和IE8上执行 new Date('2017-12-8 11:36:45'); 会得到Invalid Date
+     * 本函数重写默认的Date函数，以解决其在Safari，IE8上的bug
+     */
+    Date = function (Date) {
+      MyDate.prototype = Date.prototype;
+      return MyDate;
 
+      function MyDate() {
+        // 当只有一个参数并且参数类型是字符串时，把字符串中的-替换为/
+        if (arguments.length === 1) {
+          let arg = arguments[0];
+          if (Object.prototype.toString.call(arg) === '[object String]' && arg.indexOf('T') === -1) {
+            arguments[0] = arg.replace(/-/g, "/");
+            // console.log(arguments[0]);
+          }
+        }
+        let bind = Function.bind;
+        let unbind = bind.bind(bind);
+        return new (unbind(Date, null).apply(null, arguments));
+      }
+    }(Date);
+  </script>
 </head>
 <body>
 <div class="app-spinner">
@@ -77,18 +101,18 @@
   <div class="double-bounce2"></div>
 </div>
 
-  <!-- Ionic's root component and where the app will load -->
-  <ion-app></ion-app>
+<!-- Ionic's root component and where the app will load -->
+<ion-app></ion-app>
 
-  <!-- The polyfills js is generated during the build process -->
-  <script src="build/polyfills.js"></script>
+<!-- The polyfills js is generated during the build process -->
+<script src="build/polyfills.js"></script>
 
-  <!-- The vendor js is generated during the build process
-       It contains all of the dependencies in node_modules -->
-  <script src="build/vendor.js"></script>
+<!-- The vendor js is generated during the build process
+     It contains all of the dependencies in node_modules -->
+<script src="build/vendor.js"></script>
 
-  <!-- The main bundle js is generated during the build process -->
-  <script src="build/main.js"></script>
+<!-- The main bundle js is generated during the build process -->
+<script src="build/main.js"></script>
 
 </body>
 </html>
