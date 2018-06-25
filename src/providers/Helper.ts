@@ -46,7 +46,7 @@ export class Helper {
     // 从缓存中获取微信用户信息
     this.storage.get('wxUserInfo').then((wxUserInfo: WxUserInfo) => {
       if (wxUserInfo) {
-        callBackFun();
+        callBackFun(wxUserInfo);
       } else {
         // 获取地址栏code参数值,如果没有code则请求code
         let code = Utils.getQueryString('code');
@@ -54,12 +54,14 @@ export class Helper {
           // 通过code获取用户信息
           this.httpService.get(WX_SERVE_URL + '/v1/info/' + code).subscribe((wxUserInfo: WxUserInfo) => {
             this.storage.set('wxUserInfo', wxUserInfo);
-            callBackFun();
+            callBackFun(wxUserInfo);
           });
         } else {
           // 请求授权地址,跳转该地址浏览器地址栏会生成一个code参数,根据code参数值获取用户信息
           //   code有两种类型 snsapi_base 和 snsapi_userinfo  默认为snsapi_base,通过该code可以得到用户的openId和unionId
           //   当设置scope=snsapi_userinfo 会返回更详细的用户信息,如用户头像,昵称等;注意,设置该类型需要用户同意,会先跳转到一个让用户确认授权的界面
+          // 'http://mytest.com/workmap/'
+          debugger;
           this.httpService.post(WX_SERVE_URL + '/v1/auth?scope=snsapi_base', window.location.href).subscribe(url => {
             window.location.href = url; // 跳转到微信授权地址,会返回一个授权code
           });
