@@ -11,7 +11,9 @@ import {
   Response,
   URLSearchParams
 } from '@angular/http';
-import { Observable, TimeoutError } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
+import { TimeoutError } from 'rxjs/util/TimeoutError';
+import 'rxjs/add/operator/timeout';
 import { Utils } from './Utils';
 import { GlobalData } from './GlobalData';
 import { NativeService } from './NativeService';

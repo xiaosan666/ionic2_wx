@@ -5,8 +5,10 @@ import { Injectable } from '@angular/core';
 import { HttpService } from './HttpService';
 import { FILE_SERVE_URL } from './Constants';
 import { FileObj } from '../model/FileObj';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { NativeService } from './NativeService';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/map';
 
 /**
  * 上传图片到文件服务器

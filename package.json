@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "clean": "ionic-app-scripts clean",
-    "build": "ionic-app-scripts build",
+    "build": "ionic-app-scripts build --prod --engine browser",
+    "fix": "tslint --fix 'src/**/*.ts'",
     "lint": "ionic-app-scripts lint",
     "ionic:build": "ionic-app-scripts build",
     "ionic:serve": "ionic-app-scripts serve"
@@ -29,7 +30,7 @@
     "zone.js": "0.8.18"
   },
   "devDependencies": {
-    "@ionic/app-scripts": "3.1.0",
+    "@ionic/app-scripts": "3.1.1",
     "tslint-config-alloy": "^0.1.0",
     "tslint-eslint-rules": "^5.1.0",
     "typescript": "2.4.2",

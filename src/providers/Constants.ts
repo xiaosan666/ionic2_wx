@@ -7,7 +7,7 @@ export const file_api_dev = 'http://88.128.18.144:3333';
 export const file_api_prod = 'http://172.16.19.86/kit_file_server';
 
 /*----------------------------------------微信认证服务api----------------------------------------*/
-export const wx_api_dev = 'http://88.128.19.209:8102/api/ak/prod_ktxx';//js安全域名: http://88.128.19.209:8100/?vconsole=show
+export const wx_api_dev = 'http://88.128.19.209:8102/api/ak/prod_ktxx'; // js安全域名: http://88.128.19.209:8100/?vconsole=show
 // export const wx_api_dev = 'http://88.128.19.209:8102/api/ak/yanxiaojun';//js安全域名: http://88.128.19.209:8100/?vconsole=show
 // export const wx_api_prod = 'http://172.16.19.204:8102/api/ak/prod_en168';
 export const wx_api_prod = 'http://172.16.19.204:8102/api/ak/prod_ktxx';

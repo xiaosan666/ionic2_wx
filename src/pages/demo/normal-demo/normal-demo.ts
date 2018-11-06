@@ -9,7 +9,7 @@ declare var AlloyLever;
 })
 export class NormalDemoPage {
 
-  title = '页面title';
+  title = 'title';
 
   constructor(public app: App) {
   }
@@ -21,7 +21,7 @@ export class NormalDemoPage {
   }
 
   updateTitle() {
-    this.title = '页面title-' + Math.floor(Math.random() * 10000);
+    this.title = 'title-' + Math.floor(Math.random() * 10000);
     this.app.setTitle(this.title);
   }
 
