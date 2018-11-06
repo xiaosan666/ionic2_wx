@@ -1,6 +1,6 @@
 {
-  "name": "Ionic",
-  "short_name": "Ionic",
+  "name": "ionic2_wx",
+  "short_name": "ionic2_wx",
   "start_url": "index.html",
   "display": "standalone",
   "icons": [{
