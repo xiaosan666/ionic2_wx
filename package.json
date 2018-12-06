@@ -6,11 +6,12 @@
   "private": true,
   "scripts": {
     "clean": "ionic-app-scripts clean",
-    "build": "ionic-app-scripts build --prod --engine browser",
-    "fix": "tslint --fix 'src/**/*.ts'",
+    "build": "ionic-app-scripts build",
     "lint": "ionic-app-scripts lint",
     "ionic:build": "ionic-app-scripts build",
-    "ionic:serve": "ionic-app-scripts serve"
+    "ionic:serve": "ionic-app-scripts serve",
+    "fix": "tslint --fix 'src/**/*.ts'",
+    "build:prod:browser": "ionic build --prod --engine browser && node ./scripts/use-hashname.js"
   },
   "dependencies": {
     "@angular/common": "4.4.4",
